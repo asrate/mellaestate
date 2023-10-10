@@ -11,6 +11,9 @@ import {
   updateUserStart,
   updateUserFailure,
   updateUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -94,6 +97,27 @@ function Profile() {
       dispatch(updateUserFailure(error.message));
     }
   };
+  const handleDeleteUser = async () => {
+    const token = localStorage.getItem("access_token");
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(
+        `http://localhost:5000/api/user/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -155,13 +179,16 @@ function Profile() {
           {loading ? "Loading..." : "Update"}
         </button>
         <div className="flex justify-between">
-          <span className="text-red-700 cursor-pointer">Delete Account</span>
+          <span
+            onClick={handleDeleteUser}
+            className="text-red-700 cursor-pointer"
+          >
+            Delete Account
+          </span>
           <span className="text-red-700 cursor-pointer">Sign Out</span>
         </div>
         <p className="text-green-700 mt-5">
-          {updateSuccess
-            ? "User is updated successfully!"
-            : " not updated successfully"}
+          {updateSuccess ? "User is updated successfully!" : " "}
         </p>
       </form>
     </div>

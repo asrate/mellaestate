@@ -11,11 +11,13 @@ function OAuth() {
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      // const token = localStorage.getItem("access_token");
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
       const res = await fetch("http://localhost:5000/api/auth/google", {
         method: "POST",
         headers: {
+          // Authontication: "Bearer" + token,
           "content-type": "application/json",
         },
         body: JSON.stringify({
@@ -25,7 +27,10 @@ function OAuth() {
         }),
       });
       const data = await res.json();
+      console.log(data);
       dispatch(signInSuccess(data));
+      localStorage.setItem("access_token", data.token);
+
       //   console.log(result);
       navigate("/");
     } catch (error) {

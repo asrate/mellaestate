@@ -5,6 +5,7 @@ import userRouter from "./routers/user.router.js";
 import authRouter from "./routers/auth.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import listingRouter from "./routers/listing.router.js";
 
 dotenv.config();
 mongoose
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("api/listing", listingRouter);
 
 // create a middlware and function to handle possible error
 app.use((err, req, res, next) => {

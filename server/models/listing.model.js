@@ -29,7 +29,7 @@ const listingSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    partking: {
+    parking: {
       type: Boolean,
       required: true,
     },

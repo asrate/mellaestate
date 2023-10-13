@@ -13,13 +13,13 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    reqularPrice: {
-      type: String,
-      required: true,
+    regularPrice: {
+      type: Number,
+      // required: true,
     },
     discountPrice: {
       type: String,
-      required: true,
+      // required: true,
     },
     bedrooms: {
       type: String,
@@ -27,7 +27,7 @@ const listingSchema = new mongoose.Schema(
     },
     furnished: {
       type: Boolean,
-      required: true,
+      // required: true,
     },
     parking: {
       type: Boolean,
@@ -47,7 +47,7 @@ const listingSchema = new mongoose.Schema(
     },
     userRef: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   { timestamps: true }

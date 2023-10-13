@@ -5,32 +5,32 @@ export const createListing = async (req, res, next) => {
       name,
       description,
       address,
-      reqularPrice,
-      duscountPrice,
+      regularPrice,
+      discountPrice,
       bedrooms,
       furnished,
       parking,
       type,
       offer,
       imageUrls,
-      userREF,
+      userRef,
     } = req.body;
     const listing = await Listing.create({
       name,
       description,
       address,
-      reqularPrice,
-      duscountPrice,
+      regularPrice,
+      discountPrice,
       bedrooms,
       furnished,
       parking,
       type,
       offer,
       imageUrls,
-      userREF,
+      userRef,
     });
-    return res.status(201).json("listing");
+    return res.status(201).json(listing);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };

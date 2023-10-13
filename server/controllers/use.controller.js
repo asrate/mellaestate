@@ -1,3 +1,4 @@
+import Listing from "../models/listing.model.js";
 import User from "../models/user.model.js";
 import { errorHander } from "../utils/error.js";
 
@@ -40,5 +41,17 @@ export const deleteUser = async (req, res, next) => {
     res.status(200).json("User has been deleted");
   } catch (error) {
     next(error);
+  }
+};
+export const getUserListing = async (req, res, next) => {
+  if (req.user.id === req.params.id) {
+    try {
+      const listing = await Listing.find({ userRef: req.params.id });
+      res.status(200).json(listing);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    return next(errorHander(401, "You can only delete your own"));
   }
 };

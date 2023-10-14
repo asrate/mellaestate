@@ -52,6 +52,6 @@ export const getUserListing = async (req, res, next) => {
       next(error);
     }
   } else {
-    return next(errorHander(401, "You can only delete your own"));
+    return next(errorHander(401, "You can only your own list"));
   }
 };

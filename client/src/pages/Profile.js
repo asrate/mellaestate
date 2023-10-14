@@ -34,6 +34,8 @@ function Profile() {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formdata, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListingError, setShowListingError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
   const navigate = useNavigate;
   const dispatch = useDispatch();
   console.log(formdata);
@@ -103,6 +105,8 @@ function Profile() {
   };
   const handleDeleteUser = async () => {
     const token = localStorage.getItem("access_token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("persist:root");
     try {
       dispatch(deleteUserStart());
       const res = await fetch(
@@ -125,16 +129,41 @@ function Profile() {
   const handleSignOUT = async () => {
     try {
       dispatch(signOutStart());
-      const res = await fetch("/http://localhost/5000/api/auth/signout");
+      const res = await fetch("http://localhost:5000/api/auth/signout");
       const data = await res.json();
       if (data.success === false) {
         dispatch(signOutFailure(data.message));
         return;
       }
       dispatch(deleteUserSuccess(data));
-      localStorage.removeItem("access_token", data.token);
+      localStorage.removeItem("access_token");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+    }
+  };
+  const handleShowListing = async () => {
+    const token = localStorage.getItem("access_token");
+    try {
+      setShowListingError(false);
+      const res = await fetch(
+        `http://localhost:5000/api/user/listing/${currentUser._id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+      console.log("data=", data);
+      if (data.success === false) {
+        setShowListingError(true);
+        return;
+      }
+      setUserListings(data);
+    } catch (error) {
+      setShowListingError(true);
     }
   };
   return (
@@ -203,21 +232,63 @@ function Profile() {
         >
           create listing
         </Link>
-        <div className="flex justify-between">
-          <span
-            onClick={handleDeleteUser}
-            className="text-red-700 cursor-pointer"
-          >
-            Delete Account
-          </span>
-          <span onClick={handleSignOUT} className="text-red-700 cursor-pointer">
-            Sign Out
-          </span>
-        </div>
-        <p className="text-green-700 mt-5">
-          {updateSuccess ? "User is updated successfully!" : " "}
-        </p>
       </form>
+      <div className="flex justify-between">
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete Account
+        </span>
+        <span onClick={handleSignOUT} className="text-red-700 cursor-pointer">
+          Sign Out
+        </span>
+      </div>
+      <p className="text-green-700 mt-5">
+        {updateSuccess ? "User is updated successfully!" : " "}
+      </p>
+      <button
+        type="button"
+        onClick={handleShowListing}
+        className="text-green-700 w-full"
+      >
+        Show Listing
+      </button>
+      <p>{showListingError ? "Error showing listing" : ""}</p>
+      {userListings && userListings.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            Your Listings
+          </h1>
+          {userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt="listing cover"
+                  className="h-16 w-16 object-contain"
+                />
+              </Link>
+              <Link
+                className="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+
+              <div className="flex flex-col item-center">
+                <button className="text-red-700 uppercase">Delete</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 uppercase">Edit</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

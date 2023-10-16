@@ -127,6 +127,9 @@ function Profile() {
     }
   };
   const handleSignOUT = async () => {
+    // const token = localStorage.getItem("access_token");
+    // localStorage.removeItem("access_token");
+    // localStorage.setItem("persist:root");
     try {
       dispatch(signOutStart());
       const res = await fetch("http://localhost:5000/api/auth/signout");
@@ -136,7 +139,8 @@ function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-      localStorage.removeItem("access_token");
+      // localStorage.removeItem("access_token");
+      navigate("/sign-in");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }

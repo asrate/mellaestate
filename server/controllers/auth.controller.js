@@ -71,7 +71,7 @@ export const signOut = async (req, res, next) => {
     // console.log(localStorage.getItem("access_token"));
     // res.status(200).json("signout").redirect("/");
     // res.redirect("/");
-    res.clearCookies("token");
+    localStorage.removeItem("access_token");
     res.status(200).json("signout").redirect("/");
   } catch (error) {
     next(error);

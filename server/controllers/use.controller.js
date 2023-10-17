@@ -55,3 +55,13 @@ export const getUserListing = async (req, res, next) => {
     return next(errorHander(401, "You can only your own list"));
   }
 };
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return next(errorHander(401, "You can only your own"));
+    const { password: pass, ...rest } = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};

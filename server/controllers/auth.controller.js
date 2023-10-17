@@ -67,11 +67,8 @@ export const google = async (req, res, next) => {
 };
 export const signOut = async (req, res, next) => {
   try {
-    // localStorage.removeItem("access_token");
-    // console.log(localStorage.getItem("access_token"));
-    // res.status(200).json("signout").redirect("/");
-    // res.redirect("/");
-    localStorage.removeItem("access_token");
+    res.clearCookie("access_token");
+
     res.status(200).json("signout").redirect("/");
   } catch (error) {
     next(error);

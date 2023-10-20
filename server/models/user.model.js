@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://lh3.googleusercontent.com/a/ACg8ocLhGwaAfAR8wUVqStM1oJfv2s-pCssNeT-ZSPAOcB1JaA=s96-c",
+        "file:///C:/Users/acer/AppData/Local/Temp/8c28209b-46fb-4972-aaac-c4413b9df41f_OnlineWebFonts_COM_Icons_9c7b82729fa6b1d27c29a3ee1087e8b1.zip.41f/account_user_profile_avatar.svg",
     },
   },
   { timestamps: true }

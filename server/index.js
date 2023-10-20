@@ -6,6 +6,7 @@ import authRouter from "./routers/auth.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import listingRouter from "./routers/listing.router.js";
+import path from "path";
 
 dotenv.config();
 mongoose
@@ -14,6 +15,7 @@ mongoose
     console.log("database connected");
   })
   .catch((err) => console.log(err));
+const __dirname = path.resolve();
 const app = express();
 app.use(cors());
 

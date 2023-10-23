@@ -31,6 +31,11 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 
+app.use(express.static(path.join(__dirname, "/client/build")));
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 // create a middlware and function to handle possible error
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
